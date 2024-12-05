@@ -10,7 +10,7 @@ import static com.codeborne.selenide.Selenide.*;
 import static io.appium.java_client.AppiumBy.*;
 import static io.qameta.allure.Allure.step;
 
-public class SearchTests extends TestBase {
+public class AndroidTests extends TestBase {
 
     @Test
     void successfulSearchTest() {
@@ -49,4 +49,5 @@ public class SearchTests extends TestBase {
                     .shouldBe(Condition.visible);
         });
     }
+
 }

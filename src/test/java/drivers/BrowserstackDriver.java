@@ -1,44 +1,52 @@
 package drivers;
 
 import com.codeborne.selenide.WebDriverProvider;
+import com.codeborne.selenide.WebDriverRunner;
+import config.TestConfig;
+import io.appium.java_client.remote.MobileCapabilityType;
+import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import javax.annotation.Nonnull;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class BrowserstackDriver implements WebDriverProvider {
-    @Nonnull
-    @Override
-    public WebDriver createDriver(@Nonnull Capabilities capabilities) {
-        MutableCapabilities caps = new MutableCapabilities();
 
-        // Set your access credentials
-        caps.setCapability("browserstack.user", "euphoria_tGl3LR");
-        caps.setCapability("browserstack.key", "gBpFHuBrzjY8RWds14bf");
+    public class BrowserstackDriver implements WebDriverProvider {
 
-        // Set URL of the application under test
-        caps.setCapability("app", "bs://sample.app");
+        private static final TestConfig config = ConfigFactory.create(TestConfig.class);
 
-        // Specify device and os_version for testing
-        caps.setCapability("device", "Samsung Galaxy S22 Ultra");
-        caps.setCapability("os_version", "12.0");
+        @Nonnull
+        @Override
+        public WebDriver createDriver(@Nonnull Capabilities capabilities) {
+            DesiredCapabilities caps = new DesiredCapabilities();
+            caps.merge(capabilities);
 
-        // Set other BrowserStack capabilities
-        caps.setCapability("project", "First Java Project");
-        caps.setCapability("build", "browserstack-build-1");
-        caps.setCapability("name", "first_test");
+            // Установка параметров в зависимости от платформы
+            String platform = config.platform();
+            if ("ios".equalsIgnoreCase(platform)) {
+                caps.setCapability("platformName", "iOS");
+                caps.setCapability("deviceName", "iPhone 13 Pro");
+                caps.setCapability("automationName", "XCUITest");
+            } else {
+                caps.setCapability("platformName", "Android");
+                caps.setCapability("deviceName", "Android Emulator");
+                caps.setCapability("automationName", "UiAutomator2");
+            }
 
-        // Initialise the remote Webdriver using BrowserStack remote URL
-        // and desired capabilities defined above
-        try {
-            return new RemoteWebDriver(
-                    new URL("https://hub.browserstack.com/wd/hub"), caps);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
+            // Параметры для Browserstack
+            caps.setCapability("app", config.appUrl());
+            caps.setCapability("browserstack.user", config.browserstackUser());
+            caps.setCapability("browserstack.key", config.browserstackKey());
+
+            try {
+                return new RemoteWebDriver(new URL(config.browserstackUrl()), caps);
+            } catch (MalformedURLException e) {
+                throw new RuntimeException("Invalid BrowserStack URL", e);
+            }
         }
-    }
 }

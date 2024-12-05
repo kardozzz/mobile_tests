@@ -1,0 +1,5 @@
+platform=android
+bs_user=euphoria_tGl3LR
+bs_key=gBpFHuBrzjY8RWds14bf
+bs_url=https://hub.browserstack.com/wd/hub
+app_url=bs://sample.app

@@ -43,7 +43,9 @@ dependencies {
             "io.appium:java-client:$appiumVersion"
     )
 }
-
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
 tasks.withType(Test) {
     useJUnitPlatform()
 
