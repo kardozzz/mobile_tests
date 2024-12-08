@@ -2,8 +2,8 @@ package config;
 
 import org.aeonbits.owner.Config;
 
-@Config.Sources("classpath:config.properties")
-public interface TestConfig extends Config {
+@Config.Sources("classpath:ios_config.properties")
+public interface TestConfigAndroid extends Config {
     @Key("platform")
     String platform();
 
