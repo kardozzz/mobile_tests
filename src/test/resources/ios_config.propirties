@@ -2,4 +2,6 @@ platform=ios
 bs_user=euphoria_tGl3LR
 bs_key=gBpFHuBrzjY8RWds14bf
 bs_url=https://hub.browserstack.com/wd/hub
+device=iPhone 13 Pro
+osVersion=16.0
 app_url=bs://sample.app

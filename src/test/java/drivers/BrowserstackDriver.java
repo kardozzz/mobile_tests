@@ -27,16 +27,16 @@ public class BrowserstackDriver implements WebDriverProvider {
         String platform = System.getProperty("platform", "android");
 
         if ("ios".equalsIgnoreCase(platform)) {
-            caps.setCapability("platformName", "iOS");
-            caps.setCapability("deviceName", "iPhone 13 Pro");
-            caps.setCapability("automationName", "XCUITest");
+            caps.setCapability("platformName", iosConfig.platform());
+            caps.setCapability("deviceName", iosConfig.device());
+            caps.setCapability("os_version", iosConfig.osVersion());
             caps.setCapability("app", iosConfig.appUrl());
             caps.setCapability("browserstack.user", iosConfig.browserstackUser());
             caps.setCapability("browserstack.key", iosConfig.browserstackKey());
         } else {
-            caps.setCapability("platformName", "Android");
-            caps.setCapability("deviceName", "Android Emulator");
-            caps.setCapability("automationName", "UiAutomator2");
+            caps.setCapability("platformName", androidConfig.platform());
+            caps.setCapability("deviceName", androidConfig.device());
+            caps.setCapability("os_version", androidConfig.osVersion());
             caps.setCapability("app", androidConfig.appUrl());
             caps.setCapability("browserstack.user", androidConfig.browserstackUser());
             caps.setCapability("browserstack.key", androidConfig.browserstackKey());

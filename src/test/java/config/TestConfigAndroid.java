@@ -16,6 +16,12 @@ public interface TestConfigAndroid extends Config {
     @Key("bs_url")
     String browserstackUrl();
 
+    @Key("device")
+    String device();
+
+    @Key("os_version")
+    String osVersion();
+
     @Key("app_url")
     String appUrl();
 }
