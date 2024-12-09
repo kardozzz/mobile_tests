@@ -46,11 +46,10 @@ dependencies {
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
-test {
-    systemProperty 'platform', System.getProperty('platform', 'android')
-}
+
 tasks.withType(Test) {
     useJUnitPlatform()
+    systemProperties(System.getProperties())
 
     testLogging {
         lifecycle {
