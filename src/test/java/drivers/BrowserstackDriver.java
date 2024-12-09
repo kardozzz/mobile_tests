@@ -12,12 +12,10 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import javax.annotation.Nonnull;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 
 
 public class BrowserstackDriver implements WebDriverProvider {
-
-    private static final TestConfigAndroid androidConfig = ConfigFactory.create(TestConfigAndroid.class);
-    private static final TestConfigIOS iosConfig = ConfigFactory.create(TestConfigIOS.class);
 
     @Override
     public WebDriver createDriver(Capabilities capabilities) {
@@ -27,23 +25,27 @@ public class BrowserstackDriver implements WebDriverProvider {
         String platform = System.getProperty("platform", "android");
 
         if ("ios".equalsIgnoreCase(platform)) {
-            caps.setCapability("platformName", iosConfig.platform());
-            caps.setCapability("deviceName", iosConfig.device());
-            caps.setCapability("os_version", iosConfig.osVersion());
-            caps.setCapability("app", iosConfig.appUrl());
-            caps.setCapability("browserstack.user", iosConfig.browserstackUser());
-            caps.setCapability("browserstack.key", iosConfig.browserstackKey());
+            TestConfigIOS iosConfig = ConfigFactory.create(TestConfigIOS.class);
+            caps.setCapability("appium:deviceName", iosConfig.device());
+            caps.setCapability("appium:osVersion", iosConfig.osVersion());
+            caps.setCapability("appium:app", iosConfig.appUrl());
+            caps.setCapability("bstack:options", new HashMap<String, Object>() {{
+                put("userName", iosConfig.browserstackUser());
+                put("accessKey", iosConfig.browserstackKey());
+            }});
         } else {
-            caps.setCapability("platformName", androidConfig.platform());
-            caps.setCapability("deviceName", androidConfig.device());
-            caps.setCapability("os_version", androidConfig.osVersion());
-            caps.setCapability("app", androidConfig.appUrl());
-            caps.setCapability("browserstack.user", androidConfig.browserstackUser());
-            caps.setCapability("browserstack.key", androidConfig.browserstackKey());
+            TestConfigAndroid androidConfig = ConfigFactory.create(TestConfigAndroid.class);
+            caps.setCapability("appium:deviceName", androidConfig.device());
+            caps.setCapability("appium:osVersion", androidConfig.osVersion());
+            caps.setCapability("appium:app", androidConfig.appUrl());
+            caps.setCapability("bstack:options", new HashMap<String, Object>() {{
+                put("userName", androidConfig.browserstackUser());
+                put("accessKey", androidConfig.browserstackKey());
+            }});
         }
 
         try {
-            return new RemoteWebDriver(new URL(androidConfig.browserstackUrl()), caps);
+            return new RemoteWebDriver(new URL(System.getProperty("browserstack.url")), caps);
         } catch (MalformedURLException e) {
             throw new RuntimeException("Invalid BrowserStack URL", e);
         }

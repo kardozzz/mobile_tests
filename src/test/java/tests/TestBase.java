@@ -7,14 +7,14 @@ import org.junit.jupiter.api.BeforeAll;
 public class TestBase {
     @BeforeAll
     public static void setUp() {
-        String platform = System.getProperty("platform", "android"); // Устанавливаем платформу через системное свойство
+        String platform = System.getProperty("platform", "android");
 
         if ("ios".equalsIgnoreCase(platform)) {
-            Configuration.browser = BrowserstackDriver.class.getName(); // Использование BrowserstackDriver для iOS
+            Configuration.browser = BrowserstackDriver.class.getName();
         } else {
-            Configuration.browser = BrowserstackDriver.class.getName(); // Использование BrowserstackDriver для Android
+            Configuration.browser = BrowserstackDriver.class.getName();
         }
 
-        Configuration.timeout = 10000; // Установка таймаута ожидания
+        Configuration.timeout = 15000; // Увеличен таймаут для удаленной работы
     }
 }
